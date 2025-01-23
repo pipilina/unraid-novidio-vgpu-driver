@@ -6,18 +6,18 @@ export PACKAGE="nvidia"
 export DRIVER_AVAIL="$(wget -qO- https://api.github.com/repos/novidio/unraid-novidio-vgpu-driver/releases/tags/${KERNEL_V} | jq -r '.assets[].name' | grep -E ${PACKAGE} | grep -E -v '\.md5$' | sort -V)"
 export BRANCHES="$(wget -qO- https://raw.githubusercontent.com/novidio/unraid-novidio-vgpu-driver/master/nvidia_vgpu_versions | grep -v "UPDATED")"
 export DL_URL="https://github.com/novidio/unraid-novidio-vgpu-driver/releases/download/${KERNEL_V}"
-export SET_DRV_V="$(grep "driver_version" "/boot/config/plugins/nvidia-vgpu-driver/settings.cfg" | cut -d '=' -f2)"
-export CUR_V="$(ls -p /boot/config/plugins/nvidia-vgpu-driver/packages/${KERNEL_V%%-*} 2>/dev/null | grep -E -v '\.md5' | sort -V | tail -1)"
+export SET_DRV_V="$(grep "driver_version" "/boot/config/plugins/novidio-vgpu-driver/settings.cfg" | cut -d '=' -f2)"
+export CUR_V="$(ls -p /boot/config/plugins/novidio-vgpu-driver/packages/${KERNEL_V%%-*} 2>/dev/null | grep -E -v '\.md5' | sort -V | tail -1)"
 
 #Download Nvidia vGPU Driver Package
 download() {
-if wget -q -nc --show-progress --progress=bar:force:noscroll -O "/boot/config/plugins/nvidia-vgpu-driver/packages/${KERNEL_V%%-*}/${LAT_PACKAGE}" "${DL_URL}/${LAT_PACKAGE}" ; then
-  wget -q -nc --show-progress --progress=bar:force:noscroll -O "/boot/config/plugins/nvidia-vgpu-driver/packages/${KERNEL_V%%-*}/${LAT_PACKAGE}.md5" "${DL_URL}/${LAT_PACKAGE}.md5"
-  if [ "$(md5sum /boot/config/plugins/nvidia-vgpu-driver/packages/${KERNEL_V%%-*}/${LAT_PACKAGE} | awk '{print $1}')" != "$(cat /boot/config/plugins/nvidia-vgpu-driver/packages/${KERNEL_V%%-*}/${LAT_PACKAGE}.md5 | awk '{print $1}')" ]; then
+if wget -q -nc --show-progress --progress=bar:force:noscroll -O "/boot/config/plugins/novidio-vgpu-driver/packages/${KERNEL_V%%-*}/${LAT_PACKAGE}" "${DL_URL}/${LAT_PACKAGE}" ; then
+  wget -q -nc --show-progress --progress=bar:force:noscroll -O "/boot/config/plugins/novidio-vgpu-driver/packages/${KERNEL_V%%-*}/${LAT_PACKAGE}.md5" "${DL_URL}/${LAT_PACKAGE}.md5"
+  if [ "$(md5sum /boot/config/plugins/novidio-vgpu-driver/packages/${KERNEL_V%%-*}/${LAT_PACKAGE} | awk '{print $1}')" != "$(cat /boot/config/plugins/novidio-vgpu-driver/packages/${KERNEL_V%%-*}/${LAT_PACKAGE}.md5 | awk '{print $1}')" ]; then
     echo
     echo "-----ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR------"
     echo "--------------------------------CHECKSUM ERROR!---------------------------------"
-    rm -rf /boot/config/plugins/nvidia-vgpu-driver/packages/${KERNEL_V%%-*}/${LAT_PACKAGE}
+    rm -rf /boot/config/plugins/novidio-vgpu-driver/packages/${KERNEL_V%%-*}/${LAT_PACKAGE}
     exit 1
   fi
   echo
@@ -31,7 +31,7 @@ fi
 
 #Check if driver is already downloaded
 check() {
-if ! ls -1 /boot/config/plugins/nvidia-vgpu-driver/packages/${KERNEL_V%%-*}/ | grep -q "${PACKAGE}-$(echo $LAT_PACKAGE | cut -d '-' -f3)" ; then
+if ! ls -1 /boot/config/plugins/novidio-vgpu-driver/packages/${KERNEL_V%%-*}/ | grep -q "${PACKAGE}-$(echo $LAT_PACKAGE | cut -d '-' -f3)" ; then
   echo
   echo "+=============================================================================="
   echo "| WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING"
@@ -49,8 +49,8 @@ else
   echo "---------Noting to do, Nvidia vGPU Drivers v$(echo $LAT_PACKAGE | cut -d '-' -f3) already downloaded!---------"
   echo
   echo "------------------------------Verifying CHECKSUM!------------------------------"
-  if [ "$(md5sum /boot/config/plugins/nvidia-vgpu-driver/packages/${KERNEL_V%%-*}/${LAT_PACKAGE} | awk '{print $1}')" != "$(cat /boot/config/plugins/nvidia-vgpu-driver/packages/${KERNEL_V%%-*}/${LAT_PACKAGE}.md5 | awk '{print $1}')" ]; then
-    rm -rf /boot/config/plugins/nvidia-vgpu-driver/packages/${LAT_PACKAGE}
+  if [ "$(md5sum /boot/config/plugins/novidio-vgpu-driver/packages/${KERNEL_V%%-*}/${LAT_PACKAGE} | awk '{print $1}')" != "$(cat /boot/config/plugins/novidio-vgpu-driver/packages/${KERNEL_V%%-*}/${LAT_PACKAGE}.md5 | awk '{print $1}')" ]; then
+    rm -rf /boot/config/plugins/novidio-vgpu-driver/packages/${LAT_PACKAGE}
     echo
     echo "-----ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR-----"
     echo "--------------------------------CHECKSUM ERROR!--------------------------------"
@@ -73,8 +73,8 @@ else
 fi
 }
 
-if [ ! -d "/boot/config/plugins/nvidia-vgpu-driver/packages/${KERNEL_V%%-*}" ]; then
-  mkdir -p "/boot/config/plugins/nvidia-vgpu-driver/packages/${KERNEL_V%%-*}"
+if [ ! -d "/boot/config/plugins/novidio-vgpu-driver/packages/${KERNEL_V%%-*}" ]; then
+  mkdir -p "/boot/config/plugins/novidio-vgpu-driver/packages/${KERNEL_V%%-*}"
 fi
 
 if [ "${SET_DRV_V}" == "latest" ]; then
@@ -97,8 +97,8 @@ fi
 check
 
 #Check for old packages that are not suitable for this Kernel and not suitable for the current Nvidia driver version
-rm -f $(ls -d /boot/config/plugins/nvidia-vgpu-driver/packages/${KERNEL_V%%-*}/* 2>/dev/null | grep -v "${KERNEL_V%%-*}")
-rm -f $(ls /boot/config/plugins/nvidia-vgpu-driver/packages/${KERNEL_V%%-*}/* 2>/dev/null | grep -v "$LAT_PACKAGE")
+rm -f $(ls -d /boot/config/plugins/novidio-vgpu-driver/packages/${KERNEL_V%%-*}/* 2>/dev/null | grep -v "${KERNEL_V%%-*}")
+rm -f $(ls /boot/config/plugins/novidio-vgpu-driver/packages/${KERNEL_V%%-*}/* 2>/dev/null | grep -v "$LAT_PACKAGE")
 
 #Display message to reboot server both in Plugin and WebUI
 echo

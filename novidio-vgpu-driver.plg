@@ -2,11 +2,11 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name      "novidio-vgpu-driver">
   <!ENTITY author    "novidio">
-  <!ENTITY version   "2024.12.29">
+  <!ENTITY version   "2025.01.22a">
   <!ENTITY launch    "Settings/novidio-vgpu-driver">
   <!ENTITY gitURL    "https://github.com/&author;/unraid-&name;/raw/master">
   <!ENTITY pluginURL "&gitURL;/&name;.plg">
-  <!ENTITY md5       "8feb80a26f00f6b1415f7fa0cac2d02d">
+  <!ENTITY md5       "3a8207419a27af795d14fa8cf17cc23f">
   <!ENTITY plugin    "/boot/config/plugins/&name;">
   <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
   <!ENTITY packages  "/boot/config/plugins/&name;/packages">
@@ -15,6 +15,10 @@
 <PLUGIN  name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.11.5" support="https://www.lxg2016.com/">
 
 <CHANGES>
+##2025.01.22
+- Fix naming issues and plugin page name
+- improve plugin page layout
+
 ##2024.12.29
 - Fixed typos in deployment
 - Works with novidio build and deployment
@@ -58,7 +62,7 @@ rm -f $(ls /boot/config/plugins/&name;/&name;*.txz 2>/dev/null|grep -v '&version
 
 <FILE Name="&emhttp;/README.md">
 <INLINE>
-**Nvidia Vgpu Driver**
+**Novidio Vgpu Driver**
 
 This plugin will install the nvidia vgpu driver, which will reuse your graphics card in a virtual machine
 </INLINE>
@@ -135,7 +139,7 @@ nvidia-modprobe  >> /dev/null
 }
 
 activate() {
-if [ "$(which Xorg 2>/dev/null)" ] &amp;&amp; [ "$(cat /boot/config/plugins/nvidia-vgpu-driver/settings.cfg | grep "disable_xconfig" | cut -d '=' -f2)" != "true" ]; then
+if [ "$(which Xorg 2>/dev/null)" ] &amp;&amp; [ "$(cat /boot/config/plugins/novidio-vgpu-driver/settings.cfg | grep "disable_xconfig" | cut -d '=' -f2)" != "true" ]; then
   nvidia-xconfig --output-xconfig=/etc/X11/xorg.conf --silent 2>/dev/null
 fi
 if [[ "$SET_DRV_V" != "latest" &amp;&amp; "$SET_DRV_V" != "latest_prb" &amp;&amp; "$SET_DRV_V" != "latest_nfb" ]]; then
@@ -226,19 +230,19 @@ fi
 
 #Enable update check
 if [ "$UPDATE_CHECK" == "true" ]; then
-  if [ ! "$(crontab -l | grep "/usr/local/emhttp/plugins/nvidia-vgpu-driver/include/update-check.sh")" ]; then
-    (crontab -l ; echo ""$((0 + $RANDOM % 59))" "$(shuf -i 8-9 -n 1)" * * * /usr/local/emhttp/plugins/nvidia-vgpu-driver/include/update-check.sh &amp;&gt;/dev/null 2&gt;&amp;1") | crontab -
+  if [ ! "$(crontab -l | grep "/usr/local/emhttp/plugins/novidio-vgpu-driver/include/update-check.sh")" ]; then
+    (crontab -l ; echo ""$((0 + $RANDOM % 59))" "$(shuf -i 8-9 -n 1)" * * * /usr/local/emhttp/plugins/novidio-vgpu-driver/include/update-check.sh &amp;&gt;/dev/null 2&gt;&amp;1") | crontab -
   fi
 fi
 
 #Display message to disable and enable Docker on first installation or display successful message
 if [ "$(grep "first_installation=" "&plugin;/settings.cfg" | cut -d '=' -f2)" == "true" ]; then
-  /usr/local/emhttp/plugins/dynamix/scripts/notify -e "Nvidia Vgpu Driver" -d "Please go to -> Settings -> nvidia-vgpu-driver Perform Set up"
+  /usr/local/emhttp/plugins/dynamix/scripts/notify -e "Nvidia Vgpu Driver" -d "Please go to -> Settings -> novidio-vgpu-driver Perform Set up"
   sed -i '/first_installation=true/c\first_installation=false' "&plugin;/settings.cfg"
   echo
   echo "------------Installation of Nvidia vgpu driver v$(echo $LAT_PACKAGE | cut -d '-' -f3) successful----------------"
   echo
-  echo "Nvidia Vgpu Driver" -d "Please go to -> Settings -> nvidia-vgpu-driver Perform Set up"
+  echo "Nvidia Vgpu Driver" -d "Please go to -> Settings -> novidio-vgpu-driver Perform Set up"
 else
   sed -i '/first_installation=true/c\first_installation=false' "&plugin;/settings.cfg"
   echo
@@ -270,7 +274,7 @@ echo "---Uninstalling Nvidia vGPU driver package---"
 echo "----------------------------------------"
 # Remove plugin related files
 removepkg &name;-&version;
-crontab -l | grep -v '/usr/local/emhttp/plugins/nvidia-vgpu-driver/include/update-check.sh &amp;&gt;/dev/null 2&gt;&amp;1'  | crontab -
+crontab -l | grep -v '/usr/local/emhttp/plugins/novidio-vgpu-driver/include/update-check.sh &amp;&gt;/dev/null 2&gt;&amp;1'  | crontab -
 rm -rf /usr/local/emhttp/plugins/&name;
 rm -rf &plugin;
 echo

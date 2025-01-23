@@ -5,7 +5,7 @@
 #                                                       #
 #########################################################
 
-$plugin = "nvidia-vgpu-driver";
+$plugin = "novidio-vgpu-driver";
 $docroot = $docroot ?: $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 $translations = file_exists("$docroot/webGui/include/Translations.php");
 if ($translations) {

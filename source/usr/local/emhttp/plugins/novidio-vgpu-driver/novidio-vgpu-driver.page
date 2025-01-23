@@ -1,31 +1,31 @@
 Menu="Utilities"
-Title="Nvidia Vgpu Driver"
+Title="Novidio Vgpu Driver"
 Icon="nvidia-driver.png"
 ---
 <?php
 //Get selected driver version
-//$selected_v = shell_exec("/usr/local/emhttp/plugins/nvidia-vgpu-driver/include/exec.sh get_selected_version");
+//$selected_v = shell_exec("/usr/local/emhttp/plugins/novidio-vgpu-driver/include/exec.sh get_selected_version");
 
-//Update driver versions and create file '/tmp/nvidia_vgpu_driver'
-shell_exec('/usr/local/emhttp/plugins/nvidia-vgpu-driver/include/exec.sh update');
+//Update driver versions and create file '/tmp/novidio_vgpu_driver'
+shell_exec('/usr/local/emhttp/plugins/novidio-vgpu-driver/include/exec.sh update');
 
 //Get latest version
-$latest_v = shell_exec('/usr/local/emhttp/plugins/nvidia-vgpu-driver/include/exec.sh get_latest_version');
+$latest_v = shell_exec('/usr/local/emhttp/plugins/novidio-vgpu-driver/include/exec.sh get_latest_version');
 
 //Get current installed driver version
-$installed_v = shell_exec('/usr/local/emhttp/plugins/nvidia-vgpu-driver/include/exec.sh get_installed_version');
+$installed_v = shell_exec('/usr/local/emhttp/plugins/novidio-vgpu-driver/include/exec.sh get_installed_version');
 
 //Get mdevctl list
-$mdev_list = shell_exec('/usr/local/emhttp/plugins/nvidia-vgpu-driver/include/exec.sh get_mdev_list');
+$mdev_list = shell_exec('/usr/local/emhttp/plugins/novidio-vgpu-driver/include/exec.sh get_mdev_list');
 
-//Read driver versions from '/tmp/nvidia_vgpu_driver'
+//Read driver versions from '/tmp/novidio_vgpu_driver'
 error_reporting(E_ALL);
 ini_set('display_errors',1);
 
 //Get value from update check
-//$update_check = shell_exec("/usr/local/emhttp/plugins/nvidia-vgpu-driver/include/exec.sh update_check");
+//$update_check = shell_exec("/usr/local/emhttp/plugins/novidio-vgpu-driver/include/exec.sh update_check");
 
-//$filename = "/tmp/nvidia_vgpu_driver";
+//$filename = "/tmp/novidio_vgpu_driver";
 //$eachlines = file($filename, FILE_IGNORE_NEW_LINES);
 ?>
 
@@ -39,7 +39,7 @@ ini_set('display_errors',1);
 <script>
 function changeVersion(form) {
     var package = form.drv_version.value;
-    openBox("/usr/local/emhttp/plugins/nvidia-vgpu-driver/include/exec.sh&arg1=update_version&arg2="+package,"Downloading Package",600,800,true);
+    openBox("/usr/local/emhttp/plugins/novidio-vgpu-driver/include/exec.sh&arg1=update_version&arg2="+package,"Downloading Package",600,800,true);
     return false;
     }
 </script>
@@ -95,7 +95,7 @@ pluginScan("/etc/vgpu_unlock");
 
 <script src="<?=autov("/webGui/javascript/jquery.filetree.js")?>"></script>
 <script>
-var caURL = '/plugins/nvidia-vgpu-driver/include/exec.php';
+var caURL = '/plugins/novidio-vgpu-driver/include/exec.php';
 
 function editfile() {
   var filename = $("#file").val();
@@ -193,7 +193,7 @@ function setFormatButton() {
     <div id="title">
         <span class="left"></span>
     </div>
-    <table class="settings">
+    <table class="settings" style="margin-top: 0;">
         <tr>
             <td><b><font size="+1">nVidia vgpu Info:</font></b></td>
         </tr>
@@ -221,12 +221,16 @@ function setFormatButton() {
     <div id="title">
         <span class="right"></span>
     </div>
-    <table class="settings">
+    <table class="settings" style="margin-top: 0;">
         <tr>
             <b><font size="+1">Mdevctl types:</font></b>
         </tr>
         <tr>
-			<td style="color:green"><b><?=`mdevctl types | sed 's/^[ \t]*//' | sed 's/$/<br>/'`?></b></td>
+			<td style="color:green">
+                <div>
+                    <b><?=`mdevctl types | sed 's/^[ \t]*//' | sed 's/$/<br>/'`?></b>
+                </div>
+            </td>
 		</tr>
 	</table>
 </div>
@@ -235,7 +239,7 @@ function setFormatButton() {
     <div id="title">
         <span class="left"></span>
     </div>
-    <table class="settings">
+    <table class="settings" style="margin-top: 0;">
         <tr>
             <td><b><font size="+1">System Info</font></b></td>
         </tr>
@@ -256,7 +260,7 @@ function setFormatButton() {
     <div id="title">
         <span class="left"></span>
     </div>
-    <table class="settings">
+    <table class="settings" style="margin-top: 0;">
         <tr>
 
 <style>
@@ -267,11 +271,11 @@ table {background-color:transparent;}
 table tbody td {line-height:1.4rem;}
 </style>
 <link type="text/css" rel="stylesheet" href="<?=autov('/webGui/styles/jquery.filetree.css')?>">
-<link type="text/css" rel="stylesheet" href="<?=autov('/plugins/nvidia-vgpu-driver/styles/switchbutton.css')?>">
+<link type="text/css" rel="stylesheet" href="<?=autov('/plugins/novidio-vgpu-driver/styles/switchbutton.css')?>">
 
 <span id='debugging'></span>
 <?tr("Select a file to edit: ");?>
-<select class='choosers' id='file' onchange='editfile();'><?=$o?></select> or <input class='choosers' type='text' id="source" name="shareFolder" value="/" data-pickroot="/"><font size='5'><i style='vertical-align:middle;cursor:pointer;' onclick='editfilemanual();' class="fa fa-pencil-square-o" aria-hidden="true"></i></font>  <?tr("note: editing a binary file could have unintended consequences");?><span id='spinner' style='display:none;'><img width='25px' src='/plugins/nvidia-vgpu-driver/images/spinner2.gif'></span>
+<select class='choosers' id='file' onchange='editfile();'><?=$o?></select> or <input class='choosers' type='text' id="source" name="shareFolder" value="/" data-pickroot="/"><font size='5'><i style='vertical-align:middle;cursor:pointer;' onclick='editfilemanual();' class="fa fa-pencil-square-o" aria-hidden="true"></i></font>  <?tr("note: editing a binary file could have unintended consequences");?><span id='spinner' style='display:none;'><img width='25px' src='/plugins/novidio-vgpu-driver/images/spinner2.gif'></span>
 <div width:100%;>
 <div class='txtdiv'>
 <center><?tr("Editing");?>: <span id='editing'><?tr("No file selected");?></span></center>
@@ -295,7 +299,7 @@ table tbody td {line-height:1.4rem;}
 <?php
 if(isset($_POST['changeUPDcheck'])) {
 $updata_check_selected = $_POST["updata_check_selected"];
-shell_exec("/usr/local/emhttp/plugins/nvidia-vgpu-driver/include/exec.sh change_update_check ".escapeshellarg($updata_check_selected)."");
+shell_exec("/usr/local/emhttp/plugins/novidio-vgpu-driver/include/exec.sh change_update_check ".escapeshellarg($updata_check_selected)."");
 echo '<script>parent.window.location.reload();</script>';
 }
 ?>
