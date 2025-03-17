@@ -1,7 +1,7 @@
 <?xml version='1.0' standalone='yes'?>
 <!DOCTYPE PLUGIN [
   <!ENTITY name      "novidio-vgpu-driver">
-  <!ENTITY author    "novidio">
+  <!ENTITY author    "pipilina">
   <!ENTITY version   "2025.01.22a">
   <!ENTITY launch    "Settings/novidio-vgpu-driver">
   <!ENTITY gitURL    "https://github.com/&author;/unraid-&name;/raw/master">
@@ -94,7 +94,7 @@ fi
 }
 
 get_version() {
-LAT_PACKAGE="$(wget -qO- https://api.github.com/repos/novidio/unraid-novidio-vgpu-driver/releases/tags/${KERNEL_V} | jq -r '.assets[].name' | grep "${PACKAGE}" | grep -E -v '\.md5$' | sort -V | tail -1)"
+LAT_PACKAGE="$(wget -qO- https://api.github.com/repos/pipilina/unraid-novidio-vgpu-driver/releases/tags/${KERNEL_V} | jq -r '.assets[].name' | grep "${PACKAGE}" | grep -E -v '\.md5$' | sort -V | tail -1)"
 if [ -z "$LAT_PACKAGE" ]; then
   if [ -z "$CUR_V" ]; then
     echo
@@ -150,7 +150,7 @@ fi
 #Set variables
 KERNEL_V="$(uname -r)"
 PACKAGE="nvidia"
-DL_URL="https://github.com/novidio/unraid-novidio-vgpu-driver/releases/download/${KERNEL_V}"
+DL_URL="https://github.com/pipilina/unraid-novidio-vgpu-driver/releases/download/${KERNEL_V}"
 
 if [ ! -d "&packages;/${KERNEL_V%%-*}" ]; then
   mkdir -p "&packages;/${KERNEL_V%%-*}"
